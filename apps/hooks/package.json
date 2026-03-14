@@ -1,0 +1,20 @@
+{
+  "name": "hooks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "esbuild src/index.ts --platform=node --bundle --outdir=dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.19.15",
+    "esbuild": "^0.27.4",
+    "express": "^5.2.1"
+  }
+}
