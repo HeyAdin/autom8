@@ -14,6 +14,35 @@ datasource db {
 
 model User {
   id       String @id @default(uuid())
+  name     String
   email    String
   password String
+}
+
+model Autom {
+  id        String   @id @default(uuid())
+  triggerId String
+  trigger   Trigger?
+}
+
+model Trigger {
+  id                 String           @id @default(uuid())
+  automId            String           @unique
+  availableTriggerId String
+  autom              Autom            @relation(fields: [automId], references: [id])
+  availableTriggers  AvailableTrigger @relation(fields: [availableTriggerId], references: [id])
+  actions            Actions[]
+}
+
+model AvailableTrigger {
+  id       String    @id @default(uuid())
+  name     String
+  triggers Trigger[]
+}
+
+model Actions {
+  id        String  @id @default(uuid())
+  name      String
+  triggerId String
+  trigger   Trigger @relation(fields: [triggerId], references: [id])
 }
