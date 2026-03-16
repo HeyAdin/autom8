@@ -20,9 +20,11 @@ model User {
 }
 
 model Autom {
-  id        String   @id @default(uuid())
+  id        String     @id @default(uuid())
   triggerId String
   trigger   Trigger?
+  actions   Actions[]
+  automRun  AutomRun[]
 }
 
 model Trigger {
@@ -31,7 +33,6 @@ model Trigger {
   availableTriggerId String
   autom              Autom            @relation(fields: [automId], references: [id])
   availableTriggers  AvailableTrigger @relation(fields: [availableTriggerId], references: [id])
-  actions            Actions[]
 }
 
 model AvailableTrigger {
@@ -41,8 +42,21 @@ model AvailableTrigger {
 }
 
 model Actions {
-  id        String  @id @default(uuid())
-  name      String
-  triggerId String
-  trigger   Trigger @relation(fields: [triggerId], references: [id])
+  id               String           @id @default(uuid())
+  actionId         String
+  automId          String
+  autom            Autom            @relation(fields: [automId], references: [id])
+  availableActions AvailableActions @relation(fields: [actionId], references: [id])
+}
+
+model AvailableActions {
+  id      String    @id @default(uuid())
+  type    String
+  actions Actions[]
+}
+
+model AutomRun {
+  id      String @id @default(uuid())
+  automId String
+  autom   Autom  @relation(fields: [automId], references: [id])
 }
