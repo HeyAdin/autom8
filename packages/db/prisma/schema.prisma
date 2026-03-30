@@ -22,7 +22,6 @@ model User {
 model Autom {
   id        String     @id @default(uuid())
   triggerId String
-  metadata  Json
   trigger   Trigger?
   actions   Actions[]
   automRun  AutomRun[]
@@ -59,6 +58,7 @@ model AvailableActions {
 model AutomRun {
   id             String          @id @default(uuid())
   automId        String
+  metadata       Json
   autom          Autom           @relation(fields: [automId], references: [id])
   automRunOutbox AutomRunOutbox?
 }
