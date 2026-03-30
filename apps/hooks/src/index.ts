@@ -13,16 +13,25 @@ app.post('/health', (req, res) => {
 app.post('/hooks/catch/:userId/:automId', async (req, res) => {
     const userId = req.params.userId;
     const automId = req.params.automId;
-    const { name, email, password } = req.body;
-    console.log("before prisma")
-    await prisma.user.create({
-        data: {
-            name,
-            email,
-            password
-        }
-    });
-    
+    const body = req.body;
+    // create a transaction to put the data in the trigger
+    console.log("before transaction");
+    await prisma.$transaction(async tx => {
+        const run = await tx.automRun.create({
+            data: {
+                automId,
+                metadata: body
+            }
+        });
+
+        await tx.automRunOutbox.create({
+            data: {
+                automRunId: run.id
+            }
+        })
+    })
+    console.log("after transaction");
+
     res.status(200).json({ msg: "done" })
 })
 
