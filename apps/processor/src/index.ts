@@ -9,7 +9,6 @@ const TOPIC_NAME = "autom-events"
 async function main() {
     const producer = kafka.producer();
     await producer.connect();
-    console.log("connected to kafka")
     while (true) {
         const pendingRows = await prisma.automRunOutbox.findMany({
             where: {},
@@ -33,4 +32,4 @@ async function main() {
     }
 }
 main();
-console.log("hello");
+
