@@ -1,9 +1,10 @@
-import { Router, Request, Response } from "express";
-import { signUpSchema } from "../types/userSchema";
+import { Router, Request, Response, response } from "express";
+import { signInSchema, signUpSchema } from "../types/userSchema";
 import { prisma } from "@repo/db";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
+import { userExists } from "../utils/userExits";
 dotenv.config()
 const router = Router();
 
@@ -21,14 +22,9 @@ router.post('/signup', async (req: Request, res: Response) => {
         )
         return;
     }
+    const userDetail = await userExists(response.data.email);
 
-    // Check user already exists?
-    const userExist = await prisma.user.findFirst({
-        where: {
-            email: response.data.email
-        }
-    });
-    if (userExist) {
+    if (userDetail.success) {
         res.status(400).json(
             {
                 success: false,
@@ -55,6 +51,33 @@ router.post('/signup', async (req: Request, res: Response) => {
             token
         }
     );
+});
+
+router.post('/signin', async (req: Request, res: Response) => {
+    const body = req.body;
+    const response = signInSchema.safeParse(body);
+    if (!response.success) {
+        res.status(400).json({
+            success: false,
+            msg: response.error.issues[0]?.message
+        });
+        return;
+    }
+    const userDetail = await userExists(response.data.email);
+    if (!userDetail.success) {
+        res.status(400).json({
+            success: false,
+            msg: "user doesn't exist, Please sign up"
+        });
+        return;
+    }
+    const token = jwt.sign(userDetail.id || '', process.env.JWT_SECRET || '');
+
+    res.status(200).json({
+        success: true,
+        msg: 'user sign in successful',
+        token
+    })
 })
 
 export const userRouter = router;
