@@ -5,6 +5,8 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
 import { userExists } from "../utils/userExits";
+import { authMiddleware } from "../middleware/authMiddleware";
+import { AuthRequest } from "../utils/requestType";
 dotenv.config()
 const router = Router();
 
@@ -80,4 +82,21 @@ router.post('/signin', async (req: Request, res: Response) => {
     })
 })
 
+router.get('/', authMiddleware, (req: AuthRequest, res: Response) => {
+    const id = req.auth?.id;
+    const user = prisma.user.findFirst({
+        where: {
+            id,
+        },
+        select: {
+            id: true,
+            email: true,
+            name: true
+        }
+    })
+    res.status(200).json({
+        success: true,
+        user
+    })
+})
 export const userRouter = router;
