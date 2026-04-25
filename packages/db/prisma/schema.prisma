@@ -13,18 +13,21 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
+  id       String  @id @default(uuid())
   name     String
   email    String
   password String
+  automs   Autom[]
 }
 
 model Autom {
   id        String     @id @default(uuid())
   triggerId String
+  userId    String
   trigger   Trigger?
   actions   Actions[]
   automRun  AutomRun[]
+  user      User       @relation(fields: [userId], references: [id])
 }
 
 model Trigger {
@@ -37,7 +40,7 @@ model Trigger {
 
 model AvailableTrigger {
   id       String    @id @default(uuid())
-  name     String
+  name     String    @unique
   triggers Trigger[]
 }
 
@@ -47,12 +50,12 @@ model Actions {
   automId          String
   autom            Autom            @relation(fields: [automId], references: [id])
   availableActions AvailableActions @relation(fields: [actionId], references: [id])
-  sortingOrders Int @default(0)
+  sortingOrders    Int              @default(0)
 }
 
 model AvailableActions {
   id      String    @id @default(uuid())
-  type    String
+  type    String    @unique
   actions Actions[]
 }
 
