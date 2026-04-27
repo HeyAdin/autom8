@@ -1,4 +1,4 @@
-import { prisma, User } from "@repo/db";
+import { prisma } from "@repo/db";
 interface UserData {
     id?: string,
     email?: string,
