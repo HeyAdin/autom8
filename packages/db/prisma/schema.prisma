@@ -22,7 +22,7 @@ model User {
 
 model Autom {
   id        String     @id @default(uuid())
-  triggerId String
+  triggerId String //will think about this to remove
   userId    String
   trigger   Trigger?
   actions   Actions[]
