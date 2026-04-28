@@ -16,7 +16,7 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
         });
     }
 
-    await prisma.$transaction(async (tx) => {
+    const autom = await prisma.$transaction(async (tx) => {
         const autom = await tx.autom.create({
             data: {
                 triggerId: '',
@@ -45,26 +45,40 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
                 triggerId: trigger.id
             }
         })
+
+        return autom;
+    })
+
+    return res.status(200).json({
+        success: true,
+        msg: "autom created succesful",
+        autom
     })
 })
 
-router.get('/automs', authMiddleware, async (req: AuthRequest, res: Response) => {
+router.get('/', authMiddleware, async (req: AuthRequest, res: Response) => {
     const userId = req.auth?.id || "";
     const autom = await prisma.autom.findMany({
         where: {
             userId
         },
-        include:{
-            actions:{
-                include:{
-                    availableActions:true
+        include: {
+            actions: {
+                include: {
+                    availableActions: true
+                }
+            },
+            trigger: {
+                include: {
+                    availableTriggers: true
                 }
             }
         }
     })
-    console.log("all the automs",autom);
     return res.status(200).json({
-        success:true,
+        success: true,
         autom
     })
 })
+
+export const automRouter = router;
