@@ -32,7 +32,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${manrope.variable} ${inter.variable}`}>
         <Container className="max-w-7xl mx-auto py-3">
-          <Navbar className="flex gap-1 items-center font-display justify-between">
+          <Navbar className="flex gap-1 items-center font-display justify-between py-1 px-4 shadow">
             <div className="flex gap-1 items-center ">
               <Link href='/' className="flex gap-1 items-center">
                 <Logo classname="flex gap-1 items-center" />
