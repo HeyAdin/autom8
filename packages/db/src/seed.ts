@@ -1,4 +1,4 @@
-import { prisma } from './client.js';
+import { prisma } from './client';
 
 const actions = ['Send Email', 'Download PDF', 'Send Solana'];
 const triggers = ['Webhook', 'File Upload', 'Form Submission'];

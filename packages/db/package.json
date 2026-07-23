@@ -2,7 +2,6 @@
   "name": "@repo/db",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "exports": {
     ".": "./src/index.ts"
   },
@@ -18,11 +17,13 @@
   "type": "module",
   "dependencies": {
     "@prisma/adapter-pg": "^7.5.0",
-    "@prisma/client": "^7.5.0",
+    "@prisma/client": "^7.9.0",
     "@types/node": "^22.19.15",
     "@types/pg": "^8.18.0",
     "dotenv": "^16.0.3",
-    "pg": "^8.20.0",
-    "prisma": "^7.5.0"
+    "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "prisma": "^7.9.0"
   }
 }

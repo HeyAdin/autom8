@@ -1,0 +1,12 @@
+{
+  "extends": "@repo/typescript-config/base.json",
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "lib": ["ESNext"],
+    "target": "ESNext",
+    "moduleDetection": "force",
+    "allowJs": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules","dist"]
+}

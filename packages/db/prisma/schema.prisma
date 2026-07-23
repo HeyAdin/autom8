@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -22,12 +17,12 @@ model User {
 
 model Autom {
   id        String     @id @default(uuid())
-  triggerId String //will think about this to remove
+  triggerId String
   userId    String
-  trigger   Trigger?
   actions   Actions[]
-  automRun  AutomRun[]
   user      User       @relation(fields: [userId], references: [id])
+  automRun  AutomRun[]
+  trigger   Trigger?
 }
 
 model Trigger {
@@ -48,9 +43,9 @@ model Actions {
   id               String           @id @default(uuid())
   actionId         String
   automId          String
-  autom            Autom            @relation(fields: [automId], references: [id])
-  availableActions AvailableActions @relation(fields: [actionId], references: [id])
   sortingOrders    Int              @default(0)
+  availableActions AvailableActions @relation(fields: [actionId], references: [id])
+  autom            Autom            @relation(fields: [automId], references: [id])
 }
 
 model AvailableActions {
