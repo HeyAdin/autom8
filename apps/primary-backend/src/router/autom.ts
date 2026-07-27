@@ -16,7 +16,7 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
         });
     }
 
-    const autom = await prisma.$transaction(async (tx) => {
+    const autom = await prisma.$transaction(async (tx:any) => {
         const autom = await tx.autom.create({
             data: {
                 triggerId: '',
