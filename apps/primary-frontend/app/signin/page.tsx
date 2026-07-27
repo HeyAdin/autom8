@@ -8,7 +8,12 @@ import { signIn } from "next-auth/react";
 export default function () {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-
+    const [error , setError] = useState<string | null>(null);
+    if(error){
+        setTimeout(()=>{
+            setError(null)
+        },3000)
+    }
     return <div className="mt-4 flex flex-col items-center justify-center">
         <MeshBackground />
         <div className="text-center pt-10 md:pt-10">
@@ -57,12 +62,16 @@ export default function () {
             placeholder="Create a password" 
             setInputValue={setPassword}
             />
+            {error && <div className='text-sm text-[#FF4F00]'>{error}</div>}
 
             <button
                 type="submit"
                 className="w-full px-4 py-2.5 rounded-lg bg-[#FF4F00] hover:bg-[#FF641F] active:bg-[#E04600] text-white font-medium text-sm transition-colors cursor-pointer"
-                onClick={()=>{
-                    signIn("credentials",{username:email,password:password})
+                onClick={async()=>{
+                    const result = await signIn("credentials",{username:email,password:password , redirect:false})
+                    if(result?.error){
+                        setError(result.error + " is incorrect");
+                    }
                     console.log(email,password)
                 }}
             >

@@ -7,6 +7,7 @@ interface UserData {
     email?: string,
     name?: string
     success: boolean
+    password?:string
 }
 export async function userExists(email: string): Promise<UserData> {
     const user = await prisma.user.findFirst({
@@ -19,7 +20,7 @@ export async function userExists(email: string): Promise<UserData> {
         console.log("i am inside the check")
         return { success: false }
     }
-    return { id: user.id, success: true, email: user.email };
+    return { id: user.id, success: true, email: user.email ,password:user.password};
 }
 
 export function cn(...inputs: ClassValue[]) {

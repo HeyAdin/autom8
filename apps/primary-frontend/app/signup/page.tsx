@@ -13,6 +13,11 @@ export default function () {
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
+    if (error) {
+        setTimeout(() => {
+            setError(null)
+        }, 3000)
+    }
 
     return <div className="mt-4 flex flex-col items-center justify-center">
         <MeshBackground />
