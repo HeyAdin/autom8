@@ -1,12 +1,15 @@
+import {redirect} from 'next/navigation'
 import { Container } from "../components/container";
 import { NavBar } from "../components/navbar";
+import { getServerSession } from "next-auth";
+import { Hero } from '../components/hero';
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession();
   return (
     <Container>
-      <NavBar className="">
-      </NavBar>
-      Content
+      <NavBar className="" />
+      <Hero></Hero>
     </Container>
   );
 }

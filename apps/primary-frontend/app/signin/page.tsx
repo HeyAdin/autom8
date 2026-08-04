@@ -1,19 +1,41 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FormInput } from "../../components/Input";
 import MeshBackground from "../../components/mesh";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function () {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [error , setError] = useState<string | null>(null);
-    if(error){
-        setTimeout(()=>{
-            setError(null)
-        },3000)
-    }
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const { data: session, status } = useSession();
+    useEffect(() => {
+        const urlError = searchParams.get("error");
+        if (session) {
+            router.push('/')
+        }
+        if (urlError) {
+            if (urlError === "CredentialsSignin") {
+                setError("Invalid email or password");
+            } else {
+                setError(urlError);
+            }
+        }
+    }, [searchParams,session]);
+
+    useEffect(() => {
+        if (!error) return;
+        const timer = setTimeout(() => {
+            setError(null);
+        }, 5000);
+        return () => clearTimeout(timer);
+    }, [error]);
+
     return <div className="mt-4 flex flex-col items-center justify-center">
         <MeshBackground />
         <div className="text-center pt-10 md:pt-10">
@@ -48,34 +70,54 @@ export default function () {
             <div className="grow border-t border-neutral-500" />
         </div>
         <div className="flex flex-col gap-4 w-[80%] md:w-full max-w-sm font-inter">
-            <FormInput 
-            input={email}
-            label="Email address" 
-            type="email" 
-            placeholder="you@example.com" 
-            setInputValue={setEmail}
+            <FormInput
+                input={email}
+                label="Email address"
+                type="email"
+                placeholder="you@example.com"
+                setInputValue={setEmail}
             />
-            <FormInput 
-            input={password}
-            label="Password" 
-            type="password" 
-            placeholder="Create a password" 
-            setInputValue={setPassword}
+            <FormInput
+                input={password}
+                label="Password"
+                type="password"
+                placeholder="Enter your password"
+                setInputValue={setPassword}
             />
-            {error && <div className='text-sm text-[#FF4F00]'>{error}</div>}
+            {error && <div className='text-sm text-[#FF4F00] font-medium'>{error}</div>}
 
             <button
                 type="submit"
-                className="w-full px-4 py-2.5 rounded-lg bg-[#FF4F00] hover:bg-[#FF641F] active:bg-[#E04600] text-white font-medium text-sm transition-colors cursor-pointer"
-                onClick={async()=>{
-                    const result = await signIn("credentials",{username:email,password:password , redirect:false})
-                    if(result?.error){
-                        setError(result.error + " is incorrect");
+                disabled={loading}
+                className="w-full px-4 py-2.5 rounded-lg bg-[#FF4F00] hover:bg-[#FF641F] active:bg-[#E04600] text-white font-medium text-sm transition-colors cursor-pointer disabled:opacity-50"
+                onClick={async () => {
+                    if (!email || !password) {
+                        setError("Please enter both email and password");
+                        return;
                     }
-                    console.log(email,password)
+                    setLoading(true);
+                    setError(null);
+                    try {
+                        const result = await signIn("credentials", {
+                            username: email,
+                            password: password,
+                            redirect: false,
+                        });
+
+                        if (result?.error) {
+                            setError("Invalid email or password");
+                        } else if (result?.ok) {
+                            const redirect = searchParams.get("redirect") || "/dashboard";
+                            router.push(redirect);
+                        }
+                    } catch (e) {
+                        setError("An unexpected error occurred. Please try again.");
+                    } finally {
+                        setLoading(false);
+                    }
                 }}
             >
-                Sign In
+                {loading ? "Signing in..." : "Sign In"}
             </button>
         </div>
         <div className='font-display text-neutral-500 font-light pt-3 flex gap-2 text-sm md:text-md'>

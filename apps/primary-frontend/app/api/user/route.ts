@@ -1,7 +1,7 @@
 import { prisma } from '@repo/db'
 import { NextRequest, NextResponse } from 'next/server'
 import { signUpSchema } from '@repo/types/userSchema'
-import { userExists } from '../../../lib/utils';
+import { userExists } from '../../../lib/server-utils';
 import bcrypt from 'bcrypt';
 interface signUpBody {
     name: string,

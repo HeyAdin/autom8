@@ -6,8 +6,8 @@
 }
 
 .dark {
-  --background: #171717;
-  --foreground: #fffdf9;
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 @theme inline {
@@ -20,7 +20,7 @@
 @media(prefers-color-scheme: dark){
   :root{
     --background:#0a0a0a;
-    --foreground: #fffdf9;
+    --foreground: #ededed;
   }
 }
 

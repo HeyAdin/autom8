@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FormInput } from '../../components/Input'
 import MeshBackground from '../../components/mesh'
 import { signIn } from 'next-auth/react';
@@ -13,11 +13,14 @@ export default function () {
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
-    if (error) {
-        setTimeout(() => {
-            setError(null)
-        }, 3000)
-    }
+
+    useEffect(() => {
+        if (!error) return;
+        const timer = setTimeout(() => {
+            setError(null);
+        }, 3000);
+        return () => clearTimeout(timer);
+    }, [error]);
 
     return <div className="mt-4 flex flex-col items-center justify-center">
         <MeshBackground />

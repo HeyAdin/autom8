@@ -1,8 +1,9 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { userExists } from "../../../../lib/utils";
+import { userExists } from "../../../../lib/server-utils";
 import { prisma } from '@repo/db'
 import bcrypt from 'bcrypt'
+
 const handler = NextAuth({
     providers: [
         CredentialsProvider({
@@ -16,14 +17,12 @@ const handler = NextAuth({
                 const user = await userExists(credentials?.username || "");
                 if (user.success === false) {
                     throw new Error("User not found please sign up")
-                    return null;
                 }
 
                 const validPassword = await bcrypt.compare(credentials?.password || "",user.password||"")
 
                 if(!validPassword){
                     throw new Error("Incorrect Password")
-                    return null;
                 }
                 return {
                     id: user.id || "",
@@ -34,10 +33,11 @@ const handler = NextAuth({
         })
     ],
     pages: {
-        signIn: "/signin"
+        signIn: "/signin",
+        signOut:"/signin"
     },
     callbacks:{
-        
+       
     }
 })
 
