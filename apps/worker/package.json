@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "esbuild src/index.ts --platform=node --bundle --outdir=dist",
-    "dev": "npx tsc -b && node ./dist/index.js"
+    "dev": "npx esbuild src/index.ts --platform=node --bundle --outdir=dist && node ./dist/index.js"
   },
   "keywords": [],
   "author": "",
