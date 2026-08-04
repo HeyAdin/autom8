@@ -1,6 +1,6 @@
 import express from 'express';
-import { userRouter } from './router/user'
-import { automRouter } from './router/autom';
+import { userRouter } from './router/user.js'
+import { automRouter } from './router/autom.js';
 const app = express();
 
 app.use(express.json());

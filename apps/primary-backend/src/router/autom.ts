@@ -1,8 +1,8 @@
 import { Router, Request, Response } from "express";
-import { authMiddleware } from "../middleware/authMiddleware";
-import { AutomCreateSchema } from "../types/automSchem";
+import { authMiddleware } from "../middleware/authMiddleware.js";
+import { AutomCreateSchema } from "../types/automSchem.js";
 import { prisma } from "@repo/db";
-import { AuthRequest } from "../utils/requestType";
+import { AuthRequest } from "../utils/requestType.js";
 
 const router = Router();
 

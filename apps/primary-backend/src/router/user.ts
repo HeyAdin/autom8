@@ -1,12 +1,12 @@
 import { Router, Request, Response, response } from "express";
-import { signInSchema, signUpSchema } from "../types/userSchema";
+import { signInSchema, signUpSchema } from "../types/userSchema.js";
 import { prisma } from "@repo/db";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
-import { userExists } from "../utils/userExits";
-import { authMiddleware } from "../middleware/authMiddleware";
-import { AuthRequest } from "../utils/requestType";
+import { userExists } from "../utils/userExits.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
+import { AuthRequest } from "../utils/requestType.js";
 dotenv.config()
 const router = Router();
 

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from 'jsonwebtoken'
-import { AuthRequest } from "../utils/requestType";
+import { AuthRequest } from "../utils/requestType.js";
 
 export async function authMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
     const token = req.headers.authorization?.split(' ') || [''];

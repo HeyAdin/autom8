@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/middleware/authmiddleware.ts","./src/router/autom.ts","./src/router/user.ts","./src/types/automschem.ts","./src/types/userschema.ts","./src/utils/requesttype.ts","./src/utils/userexits.ts"],"version":"5.9.2"}
+{"root":["./src/index.ts","./src/middleware/authmiddleware.ts","./src/router/autom.ts","./src/router/user.ts","./src/types/automschem.ts","./src/types/userschema.ts","./src/utils/requesttype.ts","./src/utils/userexits.ts"],"errors":true,"version":"5.9.2"}
