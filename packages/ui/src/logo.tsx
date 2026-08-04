@@ -8,8 +8,8 @@ export function Logo({classname}:{classname:string}) {
 
 export function LogoIcon() {
     return <svg
-        width="21.5"
-        height="28"
+        width="18"
+        height="17"
         viewBox="0 0 15 20"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
