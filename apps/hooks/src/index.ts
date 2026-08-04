@@ -16,7 +16,7 @@ app.post('/hooks/catch/:userId/:automId', async (req, res) => {
     const body = req.body;
     // create a transaction to put the data in the trigger
     console.log("before transaction");
-    await prisma.$transaction(async tx => {
+    await prisma.$transaction(async (tx:any) => {
         const run = await tx.automRun.create({
             data: {
                 automId,
