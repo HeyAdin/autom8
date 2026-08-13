@@ -22,13 +22,5 @@ export default function Home() {
     }
 
     return <div>
-        {session && <div>
-            {JSON.stringify(session)}
-            <button
-                onClick={() => {
-                    signOut()
-                }}
-            >sign out</button>
-        </div>}
     </div>
 }
