@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
 import './globals.css'
 import { Providers } from "../lib/provider";
+import { Suspense } from "react";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -28,7 +29,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${manrope.variable} ${inter.variable}`}>
         <Providers>
-          {children}
+          <Suspense fallback={<div>Loading...</div>}>
+            {children}
+          </Suspense>
         </Providers>
       </body>
     </html>
