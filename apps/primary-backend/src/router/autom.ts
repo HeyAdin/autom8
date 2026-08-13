@@ -19,7 +19,6 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
     const autom = await prisma.$transaction(async (tx:any) => {
         const autom = await tx.autom.create({
             data: {
-                triggerId: '',
                 userId: req.auth?.id || "",
                 actions: {
                     create: parsedData.data.actions.map((actions, idx) => ({
@@ -36,15 +35,6 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
                 availableTriggerId: parsedData.data.availableTriggerId
             }
         });
-
-        await tx.autom.update({
-            where: {
-                id: autom.id
-            },
-            data: {
-                triggerId: trigger.id
-            }
-        })
 
         return autom;
     })
