@@ -17,7 +17,6 @@ model User {
 
 model Autom {
   id        String     @id @default(uuid())
-  triggerId String
   userId    String
   actions   Actions[]
   user      User       @relation(fields: [userId], references: [id])
