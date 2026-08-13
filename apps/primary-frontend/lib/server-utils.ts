@@ -17,5 +17,5 @@ export async function userExists(email: string): Promise<UserData> {
     if (!user?.email) {
         return { success: false };
     }
-    return { id: user.id, success: true, email: user.email, password: user.password };
+    return { id: user.id, success: true, email: user.email, password: user.password , name:user.name};
 }
