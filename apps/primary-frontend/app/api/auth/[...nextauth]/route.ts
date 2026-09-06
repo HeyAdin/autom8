@@ -1,45 +1,6 @@
 import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { userExists } from "../../../../lib/server-utils";
-import { prisma } from '@repo/db'
-import bcrypt from 'bcrypt'
-
-const handler = NextAuth({
-    providers: [
-        CredentialsProvider({
-            name: "Credentials",
-            credentials: {
-                username: { label: "Email", placeholder: "user@example.com", type: "text" },
-                password: { label: "Password", placeholder: "User@123", type: "password" }
-            },
-
-            async authorize(credentials: Record<"username" | "password", string> | undefined) {
-                const user = await userExists(credentials?.username || "");
-                if (user.success === false) {
-                    throw new Error("User not found please sign up")
-                }
-
-                const validPassword = await bcrypt.compare(credentials?.password || "",user.password||"")
-
-                if(!validPassword){
-                    throw new Error("Incorrect Password")
-                }
-                return {
-                    id: user.id || "",
-                    email:user.email || "",
-                    name: user.name || ""
-                };
-            }
-        })
-    ],
-    pages: {
-        signIn: "/signin",
-        signOut:"/signin"
-    },
-    callbacks:{
-       
-    }
-})
+import { NEXT_AUTH } from "../../../../lib/auth";
+const handler = NextAuth(NEXT_AUTH)
 
 export const GET = handler;
 export const POST = handler;
