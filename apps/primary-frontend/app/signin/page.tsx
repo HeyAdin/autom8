@@ -105,7 +105,8 @@ export default function () {
                         });
 
                         if (result?.error) {
-                            setError("Invalid email or password");
+                            console.log(result)
+                            setError(result.error);
                         } else if (result?.ok) {
                             const redirect = searchParams.get("redirect") || "/dashboard";
                             router.push(redirect);

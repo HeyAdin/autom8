@@ -20,8 +20,8 @@ export const Button = ({
     ...props
 }: ButtonProps) => {
     const variantClasses = {
-        primary: "bg-[#ff4f00] text-white",
-        secondary: "bg-gray-500 text-white"
+        primary: "bg-[#ff4f00] text-white cursor-pointer",
+        secondary: "bg-[#7C3AED] text-white cursor-pointer hover:bg-[#7C3AED]/80"
     }
     return <button 
     onClick={handleClick}
@@ -40,7 +40,7 @@ const buttonVariants = cva(
                 outline:
                     "border-border bg-background shadow-xs hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 cursor-pointer",
                 secondary:
-                    "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground cursor-pointer",
+                    "bg-secondary text-secondary-foreground hover:bg-secondary/50 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground cursor-pointer",
                 ghost:
                     "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
                 destructive:

@@ -25,7 +25,7 @@ export const Hero = () => {
                         router.push('/signin')
                     }
                 }}
-            className="shadow-brand cursor-pointer">
+            className="shadow-brand cursor-pointer p-1.5">
                 Automate Your Bounty
             </Button>
             <Buttons asChild variant='outline'>
