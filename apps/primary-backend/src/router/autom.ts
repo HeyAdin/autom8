@@ -50,7 +50,7 @@ router.get('/', authMiddleware, async (req: AuthRequest, res: Response) => {
     const userId = req.auth?.id || "";
     const autom = await prisma.autom.findMany({
         where: {
-            userId
+            userId:userId
         },
         include: {
             actions: {

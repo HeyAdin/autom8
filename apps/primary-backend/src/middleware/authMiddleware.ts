@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import { AuthRequest } from "../utils/requestType.js";
 
 export async function authMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
@@ -13,8 +13,10 @@ export async function authMiddleware(req: AuthRequest, res: Response, next: Next
         return;
     }
     try {
-        const payload = jwt.verify(token[1] || '', process.env.JWT_SECRET || '');
-        req.auth = { ...(req.auth ?? {}), id: payload as string };
+        const payload = jwt.verify(token[1] || '', process.env.JWT_SECRET! || '') as JwtPayload & { id: string; }
+        req.auth = {
+            id: payload.id,
+        };
         next()
     }
     catch (e) {
