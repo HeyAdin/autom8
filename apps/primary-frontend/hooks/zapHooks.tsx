@@ -40,7 +40,7 @@ export function useAutoms() {
         }
         const fetchAutoms = async()=>{
             setIsLoading(true);
-            const response = await axios.get('http://localhost:3004/api/v1/autom',{
+            const response:any = await axios.get('http://localhost:3004/api/v1/autom',{
                 headers:{
                     "Authorization" : `Bearer ${session?.user.accessToken}`
                 }
