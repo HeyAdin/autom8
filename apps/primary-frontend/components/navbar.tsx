@@ -6,20 +6,7 @@ import { signOut, useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "./button"
-export const navLinks = [
-    {
-        href: '/products',
-        title: "Products"
-    },
-    {
-        href: '/resources',
-        title: "Resources"
-    },
-    {
-        href: '/pricing',
-        title: "Pricing"
-    }
-]
+
 export const NavBar = ({ className, unProtected }: {
     className: string,
     unProtected: boolean
@@ -42,18 +29,13 @@ export const NavBar = ({ className, unProtected }: {
     return <div className={cn('py-2 flex justify-between items-center px-4 border-b border-neutral-800 rounded-sm text-neutral-200 ')}>
         <div className="flex items-baseline font-display font-bold gap-1 text-neutral-600">
             <Logo classname="" />
-            <div className="flex items-baseline text-xl text-neutral-200">
+            <div 
+            onClick={()=>{
+                router.push('/')
+            }}
+            className="flex items-baseline text-xl text-neutral-200 cursor-pointer">
                 Autom<span className="text-[#ff4f00] text-xl ">8</span>
             </div>
-        </div>
-        <div className="flex items-center gap-20">
-            {navLinks.map((links, index) => {
-                return <Link
-                    key={index}
-                    href={links.href}
-                    className="text-sm text-neutral-600 dark:text-neutral-200 font-medium font-display hover:text-[#ff4f00] duration-200"
-                >{links.title}</Link>
-            })}
         </div>
         {
             unProtected ? <div className="flex gap-4 items-center text-sm text-neutral-600 dark:text-neutral-800">
@@ -65,7 +47,7 @@ export const NavBar = ({ className, unProtected }: {
                             router.push('/signin')
                         }
                     }}
-                    className="py-1 px-2 font-display cursor-pointer">
+                    className="py-1 px-2 font-display cursor-pointer font-semibold ">
                     Create your workflow
                 </Button>
                 <Link
@@ -74,13 +56,6 @@ export const NavBar = ({ className, unProtected }: {
                 >Contact us
                 </Link>
             </div> : <div className="flex gap-4 items-center justify-center">
-                <Button
-                    handleClick={() => {
-
-                    }}
-                    className="py-0.5 px-2 font-display cursor-pointer font-semibold">
-                    Autom <strong className="font-bold">+</strong>
-                </Button>
                 <div className="relative" ref={dropdownRef}>
                     <button
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}

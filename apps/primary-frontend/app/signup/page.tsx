@@ -126,7 +126,7 @@ async function handleSignup({ name, email, password, setError, setSuccess }: {
     setSuccess: (boolean: boolean) => void
 }) {
     try {
-        const response = await axios.post("http://localhost:3000/api/user", {
+        const response = await axios.post("http://localhost:3000/api/signup", {
             name,
             email,
             password
