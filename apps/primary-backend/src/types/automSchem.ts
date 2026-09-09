@@ -8,4 +8,14 @@ export const AutomCreateSchema = zod.object({
         availableActionId : zod.string(),
         actionMetada: zod.any().optional()
     }))
+});
+
+export const ActionCreateSchema = zod.object({
+    type:zod.string(),
+    image:zod.string()
+})
+
+export const TriggerCreateSchema = zod.object({
+    name:zod.string(),
+    image:zod.string()
 })
