@@ -131,9 +131,7 @@ async function handleSignup({ name, email, password, setError, setSuccess }: {
             email,
             password
         })
-        console.log("i ran the fetch")
         const data = response.data;
-        console.log("data", data)
         setSuccess(true);
     }
     catch (e) {

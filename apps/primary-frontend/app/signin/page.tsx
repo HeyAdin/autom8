@@ -105,7 +105,6 @@ export default function () {
                         });
 
                         if (result?.error) {
-                            console.log(result)
                             setError(result.error);
                         } else if (result?.ok) {
                             const redirect = searchParams.get("redirect") || "/dashboard";

@@ -10,9 +10,7 @@ export function FormInput({ label, type = "text", placeholder ,setInputValue,inp
 }) {
   const [debouncedValue, setDebouncedValue] = useState("");
   useEffect(()=>{
-    console.log("I am running the use Effect")
     const timer = setTimeout(()=>{
-      console.log("I am getting changed")
       setDebouncedValue(input)
     },600);
     return ()=>clearTimeout(timer)

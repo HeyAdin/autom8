@@ -9,9 +9,9 @@ function MeshBackground() {
   ];
 
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden bg-black [perspective:700px]">
+    <div className="fixed inset-0 -z-10 overflow-hidden bg-black perspective-[700px]">
       <div
-        className="absolute left-1/2 bottom-0 w-[200%] h-[80%] -translate-x-1/2 origin-bottom [transform:rotateX(55deg)]"
+        className="absolute left-1/2 bottom-0 w-[200%] h-[80%] -translate-x-1/2 origin-bottom transform-[rotateX(55deg)]"
         style={{
           backgroundImage:
             "linear-gradient(to right, rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(to top, rgba(255,255,255,0.15) 1px, transparent 1px)",

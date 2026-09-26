@@ -11,9 +11,7 @@ export async function userExists(email: string): Promise<UserData> {
             email
         }
     });
-    console.log(user);
     if (!user?.email) {
-        console.log("i am inside the check")
         return { success: false }
     }
     return { id: user.id, success: true, email: user.email };

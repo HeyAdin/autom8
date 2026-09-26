@@ -45,10 +45,8 @@ export function useAutoms() {
                     "Authorization" : `Bearer ${session?.user.accessToken}`
                 }
             })
-            console.log("I am logging the response of the zaps hook"+response.data);
             if(response.status === 200){
                 setAutoms(response.data.autom)
-                console.log(response.data.autom)
                 setIsLoading(false);
             }
         }

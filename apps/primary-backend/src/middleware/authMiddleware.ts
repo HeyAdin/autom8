@@ -20,7 +20,6 @@ export async function authMiddleware(req: AuthRequest, res: Response, next: Next
         next()
     }
     catch (e) {
-        console.log(e);
         res.status(400).json({
             success: false,
             msg: "JWT error"

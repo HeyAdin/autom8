@@ -5,7 +5,6 @@ app.use(express.json());
 
 app.post('/health', (req, res) => {
     const body = req.body;
-    console.log(body)
     const message = `hello data ${body.data}`
     res.status(200).json({ success: true, message });
 })
@@ -15,7 +14,6 @@ app.post('/hooks/catch/:userId/:automId', async (req, res) => {
     const automId = req.params.automId;
     const body = req.body;
     // create a transaction to put the data in the trigger
-    console.log("before transaction");
     await prisma.$transaction(async (tx:any) => {
         const run = await tx.automRun.create({
             data: {
@@ -30,9 +28,8 @@ app.post('/hooks/catch/:userId/:automId', async (req, res) => {
             }
         })
     })
-    console.log("after transaction");
 
     res.status(200).json({ msg: "done" })
 })
 
-app.listen(3001, () => console.log('server listening on port 3000'));
+app.listen(3001, () => console.log('server listening on port 3001'));

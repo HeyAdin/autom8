@@ -11,7 +11,7 @@ router.get('/available', authMiddleware,async(req:Request,res:Response)=>{
     if(availableActions.length===0 || availableActions === undefined || availableActions === null){
         res.status(401).json({success:false,msg:"no actions found"})
     }
-    res.status(200).json({success:true,msg:"actions fetched successfully",trigger:availableActions})
+    res.status(200).json({success:true,msg:"actions fetched successfully",action:availableActions})
 });
 
 router.post('/create', authMiddleware,async(req:Request,res:Response)=>{
