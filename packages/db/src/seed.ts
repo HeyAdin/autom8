@@ -11,6 +11,7 @@ async function main() {
                 update: {},
                 create: {
                     type: action,
+                    image:""
                 }
             })
         ),
@@ -21,6 +22,7 @@ async function main() {
                 update: {},
                 create: {
                     name: trigger,
+                    image:""
                 }
             })
         )

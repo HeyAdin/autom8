@@ -1,2 +1,2 @@
-export { prisma } from './client.js'
-export * from '../generated/prisma/index.js' // added index.js and .js on the first line
+export { prisma } from './client'
+export * from '../generated/prisma' // added index.js and .js on the first line

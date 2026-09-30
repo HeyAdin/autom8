@@ -28,6 +28,7 @@ model Trigger {
   id                 String           @id @default(uuid())
   automId            String           @unique
   availableTriggerId String
+  metadata           Json             @default("{}")
   autom              Autom            @relation(fields: [automId], references: [id])
   availableTriggers  AvailableTrigger @relation(fields: [availableTriggerId], references: [id])
 }
@@ -35,7 +36,7 @@ model Trigger {
 model AvailableTrigger {
   id       String    @id @default(uuid())
   name     String    @unique
-  image    String    @default("")
+  image    String
   triggers Trigger[]
 }
 
@@ -51,7 +52,7 @@ model Actions {
 model AvailableActions {
   id      String    @id @default(uuid())
   type    String    @unique
-  image   String    @default("")
+  image   String
   actions Actions[]
 }
 
