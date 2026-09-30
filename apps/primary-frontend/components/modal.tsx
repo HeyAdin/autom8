@@ -1,7 +1,26 @@
-import { useAvailableActionAndTrigger } from "../hooks/availableActionAndTriggerHooks"
+"use client"
+import { useState } from "react";
+import EmailSelector from "./emailSelector";
+import SolanaSelector from "./solanaSelector";
 
-export default function Modal({ index, onSelect }: { index: number, onSelect: (props: null | { name: string, id: string }) => void }) {
-    const availableTrigger = useAvailableActionAndTrigger();
+export default function Modal({ availableItem, index, onSelect }: {
+    availableItem: {
+        id: string,
+        name?: string,
+        type?: string,
+        image: string
+    }[],
+    index: number,
+    onSelect: (props: null | { type?: string, name?: string, id: string, metadata?: any }) => void
+}) {
+
+    const [step, setStep] = useState(0);
+    const [selectedAction, setSelectedAction] = useState<{
+        id: string,
+        type: string | undefined
+    }>();
+    const isTrigger = index == 1;
+
     return (
         <div
             onClick={() => onSelect(null)}
@@ -14,7 +33,7 @@ export default function Modal({ index, onSelect }: { index: number, onSelect: (p
                 <div className="relative bg-neutral-900 border border-neutral-800 rounded-xl shadow-2xl p-4 md:p-6 text-neutral-200">
                     <div className="flex items-center justify-between border-b border-neutral-800/80 pb-4 md:pb-5">
                         <span className="text-base font-medium text-neutral-300">
-                            Select {index === 1 ? "Trigger" : "Action"}
+                            {selectedAction?.type ? selectedAction?.type : `Select ${index === 1 ? "Trigger" : "Action"}`}
                         </span>
                         <button
                             onClick={() => { onSelect(null) }}
@@ -27,9 +46,51 @@ export default function Modal({ index, onSelect }: { index: number, onSelect: (p
                             <span className="sr-only">Close modal</span>
                         </button>
                     </div>
+
                     <div>
-                        {availableTrigger.map(a => <div>{a.name}</div>)}
+                        {(step == 1 && selectedAction?.type === 'Send Email' && <EmailSelector setMetadata={(metadata) => {
+                            onSelect({
+                                ...selectedAction,
+                                metadata
+                            })
+                        }} />)}
+                        {(step == 1 && selectedAction?.type === 'Send Solana' && <SolanaSelector setMetadata={(metadata) => {
+                            onSelect({
+                                ...selectedAction,
+                                metadata
+                            })
+                        }} />)}
+
+                        {step === 0 && <div>
+                            {availableItem.map(({ id, name, image, type }: { id: string, name?: string, type?: string, image: string }) => {
+                                console.log(id, name, type);
+                                return <div key={id}
+                                    onClick={() => {
+                                        if (isTrigger) {
+                                            onSelect({
+                                                id,
+                                                name,
+                                                type
+                                            })
+                                        }
+                                        else {
+                                            setStep(s => s + 1)
+                                            setSelectedAction({
+                                                id,
+                                                type
+                                            })
+                                            console.log("step is ===== ", step, " selected action is === ", selectedAction?.type)
+                                        }
+
+                                    }}
+                                    className="flex items-center gap-2 py-1 rounded-sm hover:bg-neutral-800 px-2 cursor-pointer my-2">
+                                    <img src={image} width={20} height={20} alt="" />
+                                    {name || type}
+                                </div>
+                            })}
+                        </div>}
                     </div>
+
                 </div>
             </div>
         </div>
