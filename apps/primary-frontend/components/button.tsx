@@ -25,7 +25,7 @@ export const Button = ({
     }
     return <button 
     onClick={handleClick}
-    className={cn(className, "rounded-sm border-neutral-400", variantClasses[variants])} {...props}>
+    className={cn("rounded-sm border-neutral-400", variantClasses[variants], className)} {...props}>
         {children}
     </button>
 }

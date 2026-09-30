@@ -7,7 +7,8 @@ export const AutomsItem = () => {
         <div className="w-full">
             <div className="flex justify-between items-center px-10 border-b border-neutral-800 py-2">
                 <div className="flex-1 ">Name</div>
-                <div className="flex-1">Last Edit</div>
+                <div className="flex-1">Id</div>
+                <div className="flex-1">Created At</div>
             </div>
             <div>
                 {automs === "loading" ? <div className="w-full flex justify-center items-center">Loading Your Automs </div> : <div className="w-full text-neutral-400 text-md ">
@@ -16,6 +17,9 @@ export const AutomsItem = () => {
                             <div className="flex-1 flex gap-2">
                                 <div>{autom.trigger.availableTriggers.name}</div>
                                 <div className="flex gap-2">{autom.actions.map((action: Actions) => { return <div key={action.id}>{action.availableActions.type}</div> })}</div>
+                            </div>
+                            <div className="flex-1">
+                                {autom.id}
                             </div>
                             <div className="flex-1">
                                 {autom.id}

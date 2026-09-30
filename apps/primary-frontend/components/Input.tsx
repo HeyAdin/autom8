@@ -17,7 +17,7 @@ export function FormInput({ label, type = "text", placeholder ,setInputValue,inp
   },[input]);
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-sm font-medium text-neutral-200">{label}</label>
+      <label className="text-sm font-medium text-neutral-200 px-1">{label}</label>
       <input
       onChange={(e)=>{
         setInputValue(e.target.value);
