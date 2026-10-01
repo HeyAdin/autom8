@@ -6,7 +6,7 @@ export const AutomCreateSchema = zod.object({
     triggerMetadata: zod.any().optional(),
     actions : zod.array(zod.object({
         availableActionId : zod.string(),
-        actionMetada: zod.any().optional()
+        actionMetadata: zod.any()
     }))
 });
 
