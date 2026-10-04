@@ -18,7 +18,7 @@ export function useAvailableActionAndTrigger() {
                     "Authorization": `Bearer ${session?.user.accessToken}`
                 }
             })
-                .then((response) => {
+                .then((response:any) => {
                     setAvailableTrigger(response.data.trigger)
                 })
 
@@ -27,7 +27,7 @@ export function useAvailableActionAndTrigger() {
                     "Authorization": `Bearer ${session?.user.accessToken}`
                 }
             })
-                .then((response) => {
+                .then((response:any) => {
                     setAvailableAction(response.data.action)
                 })
         }

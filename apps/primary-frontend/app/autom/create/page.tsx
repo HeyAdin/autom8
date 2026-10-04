@@ -37,7 +37,7 @@ export default function Home() {
                     if(!availableTrigger){
                         return null;
                     }
-                    const response = await axios.post('http://localhost:3004/api/v1/autom', {
+                    const response:any = await axios.post('http://localhost:3004/api/v1/autom', {
                         availableTriggerId:selectedTrigger?.id,
                         triggerMetadata:{},
                         actions:selectedAction.map(a=>{
@@ -49,7 +49,7 @@ export default function Home() {
                             "Authorization": `Bearer ${session?.user.accessToken}`
                         },
                     })
-                    if(response.data.success === true){
+                    if(response?.data.success === true){
                         router.push('/dashboard');
                     }
                 }}

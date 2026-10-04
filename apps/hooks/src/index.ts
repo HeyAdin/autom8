@@ -1,5 +1,6 @@
 import express from 'express';
 import { prisma } from '@repo/db'
+const port = 3001;
 const app = express();
 app.use(express.json());
 
@@ -32,4 +33,4 @@ app.post('/hooks/catch/:userId/:automId', async (req, res) => {
     res.status(200).json({ msg: "done" })
 })
 
-app.listen(3001, () => console.log('server listening on port 3001'));
+app.listen(port, () => console.log('server listening on port '+ port));

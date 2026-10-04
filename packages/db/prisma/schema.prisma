@@ -45,6 +45,7 @@ model Actions {
   actionId         String
   automId          String
   sortingOrders    Int              @default(0)
+  metadata         Json             @default("{}")
   availableActions AvailableActions @relation(fields: [actionId], references: [id])
   autom            Autom            @relation(fields: [automId], references: [id])
 }
