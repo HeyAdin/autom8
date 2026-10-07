@@ -15,17 +15,22 @@ async function main() {
             take: 10
         })
 
-        producer.send({
+        await producer.send({
             topic: TOPIC_NAME,
-            messages: pendingRows.map((r:any) => ({
-                value: r.automRunId
-            }))
+            messages: pendingRows.map((r: any) => {
+                return {
+                    value: JSON.stringify({
+                        automRunId:r.automRunId,
+                        stage:0
+                    })
+                }
+            })
         })
 
         await prisma.automRunOutbox.deleteMany({
             where: {
                 id: {
-                    in: pendingRows.map((x:any) => x.id)
+                    in: pendingRows.map((x: any) => x.id)
                 }
             }
         })
