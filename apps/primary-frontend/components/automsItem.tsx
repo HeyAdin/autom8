@@ -8,7 +8,7 @@ export const AutomsItem = () => {
             <div className="flex justify-between items-center px-10 border-b border-neutral-800 py-2">
                 <div className="flex-1 ">Name</div>
                 <div className="flex-1">Id</div>
-                <div className="flex-1">Created At</div>
+                <div className="flex-1">Webhook Url</div>
             </div>
             <div>
                 {automs === "loading" ? <div className="w-full flex justify-center items-center">Loading Your Automs </div> : <div className="w-full text-neutral-400 text-md ">
@@ -22,7 +22,7 @@ export const AutomsItem = () => {
                                 {autom.id}
                             </div>
                             <div className="flex-1">
-                                {autom.id}
+                                {`http://localhost:3001/hooks/catch/${autom.userId}/${autom.id}`}
                             </div>
                             <LinkButton url={`autom/${autom.id}`} btnText=">"></LinkButton>
                         </div>
