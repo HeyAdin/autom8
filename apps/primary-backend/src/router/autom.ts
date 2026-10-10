@@ -1,8 +1,9 @@
-import { Router, Request, Response } from "express";
+import { Router, Response } from "express";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 import { AutomCreateSchema } from "../types/automSchem.js";
 import { prisma } from "@repo/db";
 import { AuthRequest } from "../utils/requestType.js";
+import { isUserVerified } from "../middleware/isUserVerified.js";
 
 const router = Router();
 
@@ -48,7 +49,7 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
     })
 })
 
-router.get('/', authMiddleware, async (req: AuthRequest, res: Response) => {
+router.get('/', authMiddleware, isUserVerified, async (req: AuthRequest, res: Response) => {
     const userId = req.auth?.id || "";
     const autom = await prisma.autom.findMany({
         where: {

@@ -1,15 +1,18 @@
 "use client"
-import { signOut, useSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { AutomsItem } from "../../components/automsItem";
 import { Heading } from "../../components/heading";
 import { Subheading } from "../../components/subheading";
 import { Button } from "../../components/button";
+import { useAutoms } from "../../hooks/zapHooks";
+import { VerifyEmailModal } from "../../components/verifyEmailModal";
 
 export default function Home() {
     const { data: session, status } = useSession();
     const router = useRouter();
+    const automs = useAutoms();
 
     useEffect(() => {
         if (status === "unauthenticated") {
@@ -17,12 +20,16 @@ export default function Home() {
         }
     }, [status, router]);
 
-    if (status === "loading") {
-        return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    if (status === "loading" || automs === "loading") {
+        return <div className="flex items-center justify-center min-h-[60vh] text-neutral-400">Loading...</div>;
     }
 
     if (!session) {
         return null;
+    }
+
+    if (automs.error) {
+        return <VerifyEmailModal onSuccess={() => automs.refetch()} />;
     }
 
     return <div>
@@ -33,6 +40,6 @@ export default function Home() {
             </div>
             <Button className="px-4 py-1 text-lg" variants='secondary' handleClick={()=>{router.push('autom/create')}} >Create <b>+</b></Button>
         </div>
-        <AutomsItem />
+        <AutomsItem automs={automs} />
     </div>
 }

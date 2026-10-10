@@ -12,12 +12,12 @@ const transport = nodemailer.createTransport({
 })
 
 
-export async function sendEmail(to:string,body:string){
+export async function sendEmail(to:string,body:string,subject="Congratulations! You Recieved the bounty"){
     await transport.sendMail({
         from:"hello@email.aadin.world",
         sender:"hello@email.aadin.world",
         to,
-        subject:"testing chal rhi bhai",
+        subject,
         text:body
     })
     console.log('email has been sent')

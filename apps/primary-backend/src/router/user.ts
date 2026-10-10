@@ -7,8 +7,14 @@ import dotenv from 'dotenv';
 import { userExists } from "../utils/userExits.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 import { AuthRequest } from "../utils/requestType.js";
+import { sendEmail } from "../utils/mail.js";
 dotenv.config()
 const router = Router();
+
+export let OTP = {
+    id: "",
+    otp: ""
+}
 
 router.post('/signup', async (req: Request, res: Response) => {
     const body = req.body;
@@ -80,6 +86,49 @@ router.post('/signin', async (req: Request, res: Response) => {
         msg: 'user sign in successful',
         token
     })
+})
+
+router.post('/sent-otp', authMiddleware, async (req: AuthRequest, res: Response) => {
+    const otp = String(Math.floor(Math.random() * 10000))
+    const email = await prisma.user.findFirst({
+        where: {
+            id: req.auth?.id
+        },
+        select: {
+            email: true
+        }
+    });
+    const body = `Profile verification otp is ${otp} please donot share this with anyone`;
+    const subject = `Otp Verification`
+    OTP = {
+        id:req.auth?.id || "",
+        otp
+    }
+    console.log(otp, email);
+    await sendEmail(email, body, subject, "otp");
+    res.status(200).json({ success: true, msg: "otp sent successfully" })
+})
+
+router.post('/verify-email', authMiddleware, async (req: AuthRequest, res: Response) => {
+    const body = req.body;
+    if(!body){
+        res.status(400).json({success:false,msg:"please enter the otp"})
+        return;
+    }
+    console.log(body);
+    if(+OTP.otp !== +body.otp || OTP.id !== req.auth?.id){
+        res.status(400).json({success:false,msg:"Please enter valid otp"});
+        return;
+    }
+    const updateStatus = await prisma.user.update({
+        where:{
+            id:req.auth?.id
+        },
+        data:{
+            status:true
+        }
+    });
+    res.status(200).json({success:true,msg:"email verification successful"})
 })
 
 router.get('/', authMiddleware, (req: AuthRequest, res: Response) => {

@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useState, useRef } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 
@@ -10,7 +10,8 @@ interface VerifyEmailModalProps {
 export function VerifyEmailModal({ onSuccess }: VerifyEmailModalProps) {
     const { data: session } = useSession();
     const [step, setStep] = useState<"initial" | "otp">("initial");
-    const [otp, setOtp] = useState("");
+    const [otp, setOtp] = useState<string[]>(["", "", "", ""]);
+    const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [message, setMessage] = useState<string | null>(null);
@@ -19,8 +20,8 @@ export function VerifyEmailModal({ onSuccess }: VerifyEmailModalProps) {
         setLoading(true);
         setError(null);
         try {
-            const res:any = await axios.post(
-                "http://localhost:3004/api/v1/user/send-otp",
+            const res: any = await axios.post(
+                "http://localhost:3004/api/v1/user/sent-otp",
                 {},
                 {
                     headers: {
@@ -29,6 +30,7 @@ export function VerifyEmailModal({ onSuccess }: VerifyEmailModalProps) {
                 }
             );
             if (res.status === 200 || res.data?.success) {
+                setOtp(["", "", "", ""]);
                 setStep("otp");
                 setMessage("Verification code sent to your email.");
             } else {
@@ -41,18 +43,55 @@ export function VerifyEmailModal({ onSuccess }: VerifyEmailModalProps) {
         }
     };
 
+    const handleOtpChange = (value: string, index: number) => {
+        const char = value.slice(-1);
+        if (char && !/^\d$/.test(char)) return;
+
+        const newOtp = [...otp];
+        newOtp[index] = char;
+        setOtp(newOtp);
+
+        if (char && index < 3) {
+            inputRefs.current[index + 1]?.focus();
+        }
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+        if (e.key === "Backspace") {
+            if (!otp[index] && index > 0) {
+                inputRefs.current[index - 1]?.focus();
+            }
+        }
+    };
+
+    const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        const pastedData = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 4);
+        if (!pastedData) return;
+
+        const newOtp = [...otp];
+        pastedData.split("").forEach((char, idx) => {
+            if (idx < 4) newOtp[idx] = char;
+        });
+        setOtp(newOtp);
+
+        const targetIndex = Math.min(pastedData.length, 3);
+        inputRefs.current[targetIndex]?.focus();
+    };
+
     const handleVerifyOtp = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!otp.trim()) {
-            setError("Please enter the verification code.");
+        const otpCode = otp.join("");
+        if (otpCode.length < 4) {
+            setError("Please enter the complete 4-digit verification code.");
             return;
         }
         setLoading(true);
         setError(null);
         try {
-            const res:any = await axios.post(
+            const res: any = await axios.post(
                 "http://localhost:3004/api/v1/user/verify-email",
-                { otp: otp.trim() },
+                { otp: otpCode },
                 {
                     headers: {
                         Authorization: `Bearer ${session?.user?.accessToken}`
@@ -73,7 +112,7 @@ export function VerifyEmailModal({ onSuccess }: VerifyEmailModalProps) {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+            className="fixed inset-x-0 bottom-0 top-14.25 z-40 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
             onClick={(e) => e.stopPropagation()}
         >
             <div
@@ -90,7 +129,7 @@ export function VerifyEmailModal({ onSuccess }: VerifyEmailModalProps) {
                     <p className="text-sm text-neutral-400 mt-1">
                         {step === "initial"
                             ? "You must verify your email address to access your automations."
-                            : "Enter the verification code sent to your email address."}
+                            : "Enter the 4-digit verification code sent to your email address."}
                     </p>
                 </div>
 
@@ -116,17 +155,23 @@ export function VerifyEmailModal({ onSuccess }: VerifyEmailModalProps) {
                         {loading ? "Sending code..." : "Send verification code"}
                     </button>
                 ) : (
-                    <form onSubmit={handleVerifyOtp} className="space-y-4">
-                        <div>
-                            <input
-                                type="text"
-                                value={otp}
-                                onChange={(e) => setOtp(e.target.value)}
-                                placeholder="Enter verification code"
-                                autoFocus
-                                required
-                                className="w-full px-4 py-2.5 rounded-lg bg-[#1A1A1A] border border-[#282828] text-white text-center tracking-widest text-lg placeholder:text-neutral-500 placeholder:tracking-normal placeholder:text-sm focus:outline-none focus:border-neutral-500 transition-colors"
-                            />
+                    <form onSubmit={handleVerifyOtp} className="space-y-5">
+                        <div className="flex justify-center gap-3 py-2">
+                            {otp.map((digit, index) => (
+                                <input
+                                    key={index}
+                                    ref={(el) => { inputRefs.current[index] = el; }}
+                                    type="text"
+                                    inputMode="numeric"
+                                    maxLength={1}
+                                    value={digit}
+                                    onChange={(e) => handleOtpChange(e.target.value, index)}
+                                    onKeyDown={(e) => handleKeyDown(e, index)}
+                                    onPaste={handlePaste}
+                                    autoFocus={index === 0}
+                                    className="w-12 h-14 text-center text-2xl font-bold bg-[#1A1A1A] border border-[#282828] text-white rounded-lg focus:outline-none focus:border-[#ff4f00] transition-colors"
+                                />
+                            ))}
                         </div>
 
                         <button
@@ -137,7 +182,7 @@ export function VerifyEmailModal({ onSuccess }: VerifyEmailModalProps) {
                             {loading ? "Verifying..." : "Submit verification code"}
                         </button>
 
-                        <div className="text-center pt-2">
+                        <div className="text-center pt-1">
                             <button
                                 type="button"
                                 onClick={handleSendOtp}

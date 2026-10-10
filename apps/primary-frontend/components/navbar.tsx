@@ -26,7 +26,7 @@ export const NavBar = ({ className, unProtected }: {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    return <div className={cn('py-2 flex justify-between items-center px-4 border-b border-neutral-800 rounded-sm text-neutral-200 ')}>
+    return <div className={cn('py-2 flex justify-between items-center px-4 border-b border-neutral-800 rounded-sm text-neutral-200 relative z-50 bg-[#0a0a0a]', className)}>
         <div className="flex items-baseline font-display font-bold gap-1 text-neutral-600">
             <Logo classname="" />
             <div 

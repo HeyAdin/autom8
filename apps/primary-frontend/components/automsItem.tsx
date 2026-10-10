@@ -2,8 +2,9 @@ import { Actions, Automs, useAutoms } from "../hooks/zapHooks";
 import { LinkButton } from "./LinkButton";
 import { VerifyEmailModal } from "./verifyEmailModal";
 
-export const AutomsItem = () => {
-    const automs = useAutoms();
+export const AutomsItem = ({ automs: passedAutoms }: { automs?: ReturnType<typeof useAutoms> } = {}) => {
+    const hookAutoms = useAutoms();
+    const automs = passedAutoms !== undefined ? passedAutoms : hookAutoms;
 
     if (automs === "loading") {
         return <div className="w-full flex justify-center items-center py-10 text-neutral-400">Loading Your Automs</div>;

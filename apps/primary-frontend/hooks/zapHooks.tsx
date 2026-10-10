@@ -20,7 +20,8 @@ export interface Triggers{
     availableTriggerId:string,
     availableTriggers:{
         id: string,
-        name: string
+        name: string,
+        image:string
     },
 }
 export interface Automs {
