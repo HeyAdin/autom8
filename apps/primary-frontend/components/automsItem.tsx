@@ -1,18 +1,28 @@
-import { Actions, Automs, useAutoms } from "../hooks/zapHooks"
+import { Actions, Automs, useAutoms } from "../hooks/zapHooks";
 import { LinkButton } from "./LinkButton";
+import { VerifyEmailModal } from "./verifyEmailModal";
 
 export const AutomsItem = () => {
     const automs = useAutoms();
-    return <div className=" pb-2 my-7 mx-5">
+
+    if (automs === "loading") {
+        return <div className="w-full flex justify-center items-center py-10 text-neutral-400">Loading Your Automs</div>;
+    }
+
+    if (automs.error) {
+        return <VerifyEmailModal onSuccess={() => automs.refetch()} />;
+    }
+
+    return <div className="pb-2 my-7 mx-5">
         <div className="w-full">
             <div className="flex justify-between items-center px-10 border-b border-neutral-800 py-2">
-                <div className="flex-1 ">Name</div>
+                <div className="flex-1">Name</div>
                 <div className="flex-1">Id</div>
                 <div className="flex-1">Webhook Url</div>
             </div>
             <div>
-                {automs === "loading" ? <div className="w-full flex justify-center items-center">Loading Your Automs </div> : <div className="w-full text-neutral-400 text-md ">
-                    {automs.map((autom: Automs) => {
+                <div className="w-full text-neutral-400 text-md">
+                    {automs.data.map((autom: Automs) => {
                         return <div key={autom.id} className="border-b border-neutral-800 p-2 flex items-center hover:bg-neutral-900">
                             <div className="flex-1 flex gap-2">
                                 <div>{autom.trigger.availableTriggers.name}</div>
@@ -27,8 +37,7 @@ export const AutomsItem = () => {
                             <LinkButton url={`autom/${autom.id}`} btnText=">"></LinkButton>
                         </div>
                     })}
-                </div>}
-
+                </div>
             </div>
         </div>
     </div>

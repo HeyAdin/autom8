@@ -31,29 +31,45 @@ export interface Automs {
 }
 
 export function useAutoms() {
-    const {data:session,status} = useSession()
-    const [isLoading, setIsLoading] = useState<Boolean>(false);
+    const { data: session, status } = useSession();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [automs, setAutoms] = useState<Automs[]>([]);
-    useEffect(()=>{
+    const [error, setError] = useState<string | null>(null);
+    const [reloadKey, setReloadKey] = useState<number>(0);
+
+    const refetch = () => {
+        setReloadKey((prev) => prev + 1);
+    };
+
+    useEffect(() => {
         if (status !== "authenticated") {
             return;
         }
-        const fetchAutoms = async()=>{
+        const fetchAutoms = async () => {
             setIsLoading(true);
-            const response:any = await axios.get('http://localhost:3004/api/v1/autom',{
-                headers:{
-                    "Authorization" : `Bearer ${session?.user.accessToken}`
+            setError(null);
+            try {
+                const response: any = await axios.get('http://localhost:3004/api/v1/autom', {
+                    headers: {
+                        "Authorization": `Bearer ${session?.user.accessToken}`
+                    }
+                });
+                if (response.status === 200) {
+                    setAutoms(response.data.autom);
+                } else {
+                    setError(response.data.msg);
                 }
-            })
-            if(response.status === 200){
-                setAutoms(response.data.autom)
+            } catch (err: any) {
+                setError(err?.response?.data?.msg || "Failed to fetch automs");
+            } finally {
                 setIsLoading(false);
             }
-        }
+        };
         fetchAutoms();
-    },[status,session])
+    }, [status, session, reloadKey]);
+
     if (status === "loading" || isLoading) {
         return "loading";
     }
-    return automs;
+    return { data: automs, error, refetch };
 }
