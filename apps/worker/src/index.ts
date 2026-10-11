@@ -62,7 +62,7 @@ async function main() {
                 const amount = parse((currentAction?.metadata as JsonObject)?.amount as string, automRunMetadata);
                 const address = parse((currentAction?.metadata as JsonObject)?.address as string, automRunMetadata)
                 console.log("Sending Solana")
-                await new Promise(resolve => setTimeout(resolve, 3000));
+
                 console.log(`Sending out solana is to ${address} and amount of ${amount} SOL`);
             }
             if (currentAction?.availableActions.type === "Send Email") {
